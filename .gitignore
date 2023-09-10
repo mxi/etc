@@ -1,1 +1,5 @@
+load_terminfo
+
 tags
+tags.lock
+tags.temp
