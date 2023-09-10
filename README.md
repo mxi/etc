@@ -1,5 +1,3 @@
-<h1> mxi/etc </h1>
-
 A collection of experimental programs.
 
 <h2> C </h2>
