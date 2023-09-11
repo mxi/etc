@@ -3,20 +3,25 @@
 CFLAGS := -std=c99                \
 		  -Wall -Wextra -pedantic \
 		  -Wold-style-definition  \
-		  -fsanitize=undefined    \
-		  -fsanitize=address
 
 ifdef optimize
-	CFLAGS += -O2 -ffast-math
+	CFLAGS += -O2         \
+			  -ffast-math \
+			  -DNDEBUG=1
+
 else
-	CFLAGS += -O0 -ggdb
+	CFLAGS += -O0 -ggdb            \
+			  -fsanitize=undefined \
+			  -fsanitize=address
 endif
 
-TARGETS := load_terminfo
-
-$(TARGETS): %: %.c
+# terminfo
+load_terminfo: load_terminfo.c external/basics.h
 	$(CC) $(CFLAGS) -o $@ $<
 
+TARGETS += load_terminfo
+
+# PHONYs
 all: $(TARGETS)
 
 clean:

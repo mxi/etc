@@ -514,6 +514,9 @@ main(int argc, char const *argv[])
     struct buffer content;
     struct info_base base;
 
+    memset(&content, 0, sizeof(content));
+    memset(&base, 0, sizeof(base));
+
     info_base_initialize(&base);
 
     /* what terminal */
