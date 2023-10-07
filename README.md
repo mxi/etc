@@ -39,5 +39,16 @@ A collection of experimental programs.
 </p>
 </details>
 
+<details> 
+<summary> 
+    <b><a href="/diamond_mro.py">diamond_mro.py</a></b> - Demonstration of
+    Python's breadth first method resolution scheme with inheritance.
+</summary>
+
+<p>
+    Nothing much to add really...
+</p>
+</details>
+
 
 
