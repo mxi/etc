@@ -1,5 +1,4 @@
-build
-
+*.dSYM
 tags
 tags.lock
 tags.temp
