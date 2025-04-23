@@ -1,10 +1,8 @@
-A collection of experimental programs.
+A collection of experiments.
 
-<h2> C </h2>
-
-<details> 
+<details>
 <summary> 
-    <b><a href="c/load_terminfo.c">load_terminfo.c</a></b> - Dump a
+    <b><a href="load_terminfo.c">load_terminfo.c</a></b> - Dump a
     subset of parsed terminfo without using <code>infocmp</code>.
 </summary>
 
@@ -12,11 +10,9 @@ A collection of experimental programs.
 
 </details>
 
-<h2> Python </h2>
-
-<details> 
+<details>
 <summary> 
-    <b><a href="py/rb_tree.py">rb_tree.py</a></b> - Curses-based red-black 
+    <b><a href="rb_tree.py">rb_tree.py</a></b> - Curses-based red-black 
     tree visualizer in Python.
 </summary>
 
@@ -41,7 +37,7 @@ A collection of experimental programs.
 
 <details> 
 <summary> 
-    <b><a href="py/diamond_mro.py">diamond_mro.py</a></b> - Demonstration of
+    <b><a href="diamond_mro.py">diamond_mro.py</a></b> - Demonstration of
     Python's breadth first method resolution scheme with inheritance.
 </summary>
 
