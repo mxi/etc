@@ -19,10 +19,10 @@ typedef struct
     float time;
 } Uniform;
 
-@interface Renderer : NSObject<MTKViewDelegate> 
+@interface RenderView : MTKView
 @end
 
-@implementation Renderer
+@implementation RenderView
 {
     id<MTLDevice> _device;
     id<MTLCommandQueue> _commandQueue;
@@ -36,19 +36,20 @@ typedef struct
     uint64_t _currentRenderTimeNS;
 }
 
-- (instancetype)initWithMetalKitView:(MTKView *)view 
+- (instancetype)initWithFrame:(NSRect) frame 
 {
-    if (self = [super init]) 
+    if (self = [super initWithFrame:frame]) 
     {
-        _startTimeNS = [Renderer timeNowNS];
+        _startTimeNS = [RenderView timeNowNS];
         _lastRenderTimeNS = _startTimeNS;
 
-        _device = MTLCreateSystemDefaultDevice();
-        view.device = _device;
-        view.delegate = self;
+        self.device = 
+            _device = MTLCreateSystemDefaultDevice();
+        self.colorPixelFormat = MTLPixelFormatBGRA8Unorm;
+        self.clearColor = MTLClearColorMake(0.0, 0.0, 0.0, 1.0);
 
         [self setupTexture];
-        [self setupPipeline:view];
+        [self setupPipeline];
         [self setupVertexBuffer];
         [self setupUniformBuffer];
         
@@ -88,7 +89,7 @@ typedef struct
     _sampler = [_device newSamplerStateWithDescriptor:samplerDesc];
 }
 
-- (void)setupPipeline:(MTKView *)view 
+- (void)setupPipeline
 {
     NSError *error = nil;
 
@@ -143,7 +144,7 @@ typedef struct
         [[MTLRenderPipelineDescriptor alloc] init];
     pipelineDescriptor.vertexFunction = vertexFunction;
     pipelineDescriptor.fragmentFunction = fragmentFunction;
-    pipelineDescriptor.colorAttachments[0].pixelFormat = view.colorPixelFormat;
+    pipelineDescriptor.colorAttachments[0].pixelFormat = self.colorPixelFormat;
     pipelineDescriptor.vertexDescriptor = vertexDesc;
     
     /* 
@@ -180,16 +181,11 @@ typedef struct
                                           options:MTLResourceStorageModeShared];
 }
 
-- (void)mtkView:(MTKView *)view drawableSizeWillChange:(CGSize)size 
-{
-    /* Respond to drawable size changes if needed */
-}
-
-- (void)drawInMTKView:(MTKView *)view 
+- (void)drawRect:(NSRect) dirty
 {
     [self tick];
 
-    NSWindow *window = [view window];
+    NSWindow *window = [self window];
     if (window)
     {
         double frameRate = 1.0 / [self frameTime];
@@ -211,7 +207,7 @@ typedef struct
      * for the screen including the pixel format, antialiasing, other color, stencil,
      * and maybe depth attatchments.
      */
-    MTLRenderPassDescriptor *desc = view.currentRenderPassDescriptor;
+    MTLRenderPassDescriptor *desc = self.currentRenderPassDescriptor;
     if (desc) 
     {
         /* converts our rendering commands to GPU's/driver's message format. */
@@ -228,7 +224,7 @@ typedef struct
         [encoder endEncoding];
         
         /* present the drawable (the drawable tracks when  */
-        [buffer presentDrawable:view.currentDrawable];
+        [buffer presentDrawable:self.currentDrawable];
     }
     
     /* commit buffer */
@@ -257,7 +253,7 @@ typedef struct
 
 - (void)tick
 {
-    uint64_t timeNowNS = [Renderer timeNowNS];
+    uint64_t timeNowNS = [RenderView timeNowNS];
     _lastRenderTimeNS = _currentRenderTimeNS;
     _currentRenderTimeNS = timeNowNS;
 }
@@ -269,13 +265,13 @@ typedef struct
 
 @end /* Renderer */
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
-@property (nonatomic, strong) NSWindow *window;
-@property (nonatomic, strong) MTKView *mtkView;
-@property (nonatomic, strong) Renderer *renderer;
+@interface AppDelegate : NSObject<NSApplicationDelegate>
 @end
 
 @implementation AppDelegate
+{
+    NSWindow *_window;
+}
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification 
 {
@@ -287,14 +283,10 @@ typedef struct
                                               defer:NO];
     _window.title = @"Metal Triangle";
     
+    /* create window and render view */
+    _window.contentView = [[RenderView alloc] initWithFrame:frame];
+
     /* create metal view */
-    _mtkView = [[MTKView alloc] initWithFrame:frame];
-    _mtkView.colorPixelFormat = MTLPixelFormatBGRA8Unorm;
-    _mtkView.clearColor = MTLClearColorMake(0.0, 0.0, 0.0, 1.0);
-    _window.contentView = _mtkView;
-    
-    /* initial renderer */
-    _renderer = [[Renderer alloc] initWithMetalKitView:_mtkView];
     
     /* show window */
     [_window center];
