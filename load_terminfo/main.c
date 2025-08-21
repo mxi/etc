@@ -931,15 +931,36 @@ main(int argc, char const *argv[])
         goto done;
     }
 
-    /* load in the terminfo compiled file */
-    char path[128] = {0};
-    snprintf(path, sizeof(path)-1, "/usr/share/terminfo/%c/%s", term[0], term);
+    /* try to load the compiled terminfo file corresponding to our terminal. */
 
-    printf("PATH %s\n", path);
-    if (!load_file(path, &content.base, &content.size)) {
-        exit_code = EXIT_BAD;
-        goto done;
+    /* On linux, the path is indexed by a character */
+    {
+        char path[128] = {0};
+        snprintf(path, sizeof(path)-1, "/usr/share/terminfo/%c/%s", term[0], term);
+
+        printf("Trying to load: %s\n", path);
+
+        if (load_file(path, &content.base, &content.size)) {
+            goto parse;
+        }
     }
+
+    /* on macos, the path is indexed by the hexadecimal of the first character */
+    {
+        char path[128] = {0};
+        snprintf(path, sizeof(path)-1, "/usr/share/terminfo/%02x/%s", term[0], term);
+
+        printf("Trying to load: %s\n", path);
+
+        if (load_file(path, &content.base, &content.size)) {
+            goto parse;
+        }
+    }
+
+    printf("Failed to find a corresponding terminfo file!\n");
+
+    exit_code = EXIT_BAD;
+    goto done;
 
     /*
      * LOAD LEGACY PORTION
@@ -955,6 +976,7 @@ main(int argc, char const *argv[])
         int16_t string_table_size;
     } header;
 
+parse:
     {
         size_t const bytes = 
             basics_memory_read_16le(content.base, content.size, 0, &header, 6);
