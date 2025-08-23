@@ -1,6 +1,7 @@
-a.out
 *.dSYM
 build
+.DS_Store
+a.out
 tags
 tags.lock
 tags.temp
