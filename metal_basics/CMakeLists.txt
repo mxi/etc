@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 project(metal_basics LANGUAGES OBJC)
 set(CMAKE_OBJC_STANDARD 11)
 set(CMAKE_OBJC_STANDARD_REQUIRED ON)
+set(CMAKE_OSX_DEPLOYMENT_TARGET 13.5)
 
 if(NOT APPLE)
     message(FATAL_ERROR "Cannot compile Metal applications on non-Apple devices.")
