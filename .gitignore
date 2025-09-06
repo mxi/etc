@@ -1,6 +1,8 @@
-*.dSYM
-build
 .DS_Store
+.cache
+build
+
+*.dSYM
 a.out
 tags
 tags.lock
