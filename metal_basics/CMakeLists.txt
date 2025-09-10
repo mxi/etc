@@ -29,7 +29,22 @@ else()
     add_compile_options(-O2)
 endif()
 
-add_executable(triangle_colored_ca triangle_colored_ca.m)
 add_executable(triangle_colored triangle_colored.m)
 add_executable(triangle_textured triangle_textured.m)
 add_executable(triangle_textured_spinning triangle_textured_spinning.m)
+
+add_executable(triangle_colored_ca MACOSX_BUNDLE
+    triangle_colored_ca.m
+    shaders/TriangleColored.metal)
+
+set_source_files_properties(shaders/TriangleColored.metal PROPERTIES
+    MACOSX_PACKAGE_LOCATION "Resources/shaders")
+
+set_target_properties(triangle_colored_ca PROPERTIES
+    MACOSX_BUNDLE True
+    MACOSX_BUNDLE_GUI_IDENTIFIER io.github.mxi.triangle_colored_ca
+    MACOSX_BUNDLE_BUNDLE_NAME triangle_colored_ca
+    MACOSX_BUNDLE_BUNDLE_VERSION "2025.09.10"
+    MACOSX_BUNDLE_SHORT_VERSION_STRING "2025.09.10"
+    MACOSX_BUNDLE_INFO_PLIST ${CMAKE_SOURCE_DIR}/stock/Info.plist.in
+)

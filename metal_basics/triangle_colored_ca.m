@@ -86,9 +86,12 @@ typedef struct
 {
     NSError *error = nil;
 
-    NSString *shaderSource = [NSString stringWithContentsOfFile:@"../shaders/TriangleColored.metal" 
-                                                       encoding:NSUTF8StringEncoding 
-                                                           error:nil];
+    NSString *shaderPath = [[NSBundle mainBundle] pathForResource:@"TriangleColored" 
+                                                           ofType:@"metal"
+                                                      inDirectory:@"shaders"];
+
+    NSString *shaderSource = [NSString stringWithContentsOfFile:shaderPath encoding:NSUTF8StringEncoding error:nil];
+
     if (!shaderSource)
     {
         NSLog(@"Failed to load shaders!");
@@ -140,7 +143,7 @@ typedef struct
     pipelineDesc.vertexDescriptor = vertexDesc;
     pipelineDesc.vertexFunction = _vertexShader;
     pipelineDesc.fragmentFunction = _fragmentShader;
-    pipelineDesc.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
+    pipelineDesc.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm; // TODO: Figure out why _metalLayer.pixelFormat is 0
 
     _pipelineState = [_device newRenderPipelineStateWithDescriptor:pipelineDesc 
                                                              error:&error];
@@ -241,6 +244,11 @@ typedef struct
     
     [_window center];
     [_window orderFrontRegardless];
+}
+
+- (void)applicationWillTerminate:(NSNotification *)notification 
+{
+    NSLog(@"I will die!");
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender 
