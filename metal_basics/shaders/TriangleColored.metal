@@ -8,12 +8,6 @@ typedef struct
     float4 color [[attribute(1)]];
 } VertexInput;
 
-typedef struct
-{
-    float2 position;
-    float4 color;
-} Test;
-
 typedef struct 
 {
     float4 position [[position]];

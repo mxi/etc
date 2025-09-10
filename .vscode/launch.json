@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "triangle_colored_ca",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/metal_basics/build/triangle_colored_ca",
+            "cwd": "${workspaceFolder}/metal_basics/build/",
+            "args": [],
+        },
+        {
+            "name": "triangle_colored",
+            "type": "lldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/metal_basics/build/triangle_colored",
+            "cwd": "${workspaceFolder}/metal_basics/build/",
+            "args": [],
+        },
+    ],
+}

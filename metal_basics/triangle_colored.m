@@ -132,7 +132,10 @@ typedef struct
 
 - (void)drawInMTKView:(MTKView *)view 
 {
+    static int i = 0;
+
     NSWindow *window = [view window];
+
     if (window)
     {
         double frameRate = 1.0 / [self tick];
@@ -147,8 +150,14 @@ typedef struct
      * and maybe depth attatchments.
      */
     MTLRenderPassDescriptor *desc = view.currentRenderPassDescriptor;
+
     if (desc) 
     {
+        if (i == 0)
+        {
+            NSLog(@"RPD: %@", desc);
+        }
+
         /* converts our rendering commands to GPU's/driver's message format. */
         id<MTLRenderCommandEncoder> encoder = [buffer renderCommandEncoderWithDescriptor:desc];
         
@@ -162,9 +171,16 @@ typedef struct
         /* present the drawable (the drawable tracks when  */
         [buffer presentDrawable:view.currentDrawable];
     }
+
+    if (i == 0)
+    {
+        NSLog(@"CMB: %@", buffer);
+    }
     
     /* commit buffer */
     [buffer commit];
+
+    ++i;
 }
 
 - (double)tick

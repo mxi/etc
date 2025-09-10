@@ -12,21 +12,24 @@ endif()
 find_library(AppKit AppKit REQUIRED)
 find_library(Metal Metal REQUIRED)
 find_library(MetalKit MetalKit REQUIRED)
+find_library(QuartzCore QuartzCore REQUIRED) # aka, CoreAnimation
 message(STATUS "AppKit: ${AppKit}")
 message(STATUS "Metal: ${Metal}")
 message(STATUS "MetalKit: ${MetalKit}")
-link_libraries(${AppKit} ${Metal} ${MetalKit})
+message(STATUS "QuartzCore: ${QuartzCore}")
+link_libraries(${AppKit} ${Metal} ${MetalKit} ${QuartzCore})
 
 if(NOT DEFINED METAL_TRIANGLE_RELEASE)
     set(SANITIZERS
         -fsanitize=undefined
         -fsanitize=address)
-    add_compile_options(-Wall -Wextra -Wpedantic ${SANITIZERS})
+    add_compile_options(-Wall -g2 -Wextra -Wpedantic ${SANITIZERS})
     add_link_options(${SANITIZERS})
 else()
     add_compile_options(-O2)
 endif()
 
+add_executable(triangle_colored_ca triangle_colored_ca.m)
 add_executable(triangle_colored triangle_colored.m)
 add_executable(triangle_textured triangle_textured.m)
 add_executable(triangle_textured_spinning triangle_textured_spinning.m)
