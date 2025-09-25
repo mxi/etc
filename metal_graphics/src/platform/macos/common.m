@@ -2,7 +2,7 @@
 
 #import <Foundation/Foundation.h>
 
-#include "log.h"
+#include "../common.h"
 
 void log_message(int level, const char *format, ...)
 {

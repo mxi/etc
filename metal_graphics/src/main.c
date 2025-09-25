@@ -1,7 +1,11 @@
-#include <log.h>
+#include "platform/common.h"
 
-int mg_main(void)
+void mg_init(void)
 {
-    log_info("hello world!");
-    return 0;
+    log_info("init called!");
+}
+
+void mg_shutdown(void)
+{
+    log_info("shutdown called!");
 }

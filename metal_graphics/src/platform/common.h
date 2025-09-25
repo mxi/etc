@@ -1,5 +1,5 @@
-#ifndef MXI_LOG_H
-#define MXI_LOG_H 1
+#ifndef MXI_METAL_GRAPHICS_COMMON_H
+#define MXI_METAL_GRAPHICS_COMMON_H 1
 
 #define LOG_LEVEL_ERROR 1
 #define LOG_LEVEL_WARN 2
@@ -23,4 +23,4 @@ void log_message(int level, char const *format, ...);
 #  define log_info(...) log_message(LOG_LEVEL_INFO, __VA_ARGS__)
 #endif
 
-#endif /* MXI_METAL_GRAPHICS_LOG_H */
+#endif /* MXI_METAL_GRAPHICS_COMMON_H */
